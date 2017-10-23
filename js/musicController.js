@@ -15,7 +15,7 @@ class MusicController {
 
     createAudios() {
         for (var i = 0; i < this.stages.length; i++) {
-            this.audios.push(newAudio(stages[i].audioSource));
+            this.audios.push(this.newAudio(this.stages[i].audioSource));
         }
     }
 
