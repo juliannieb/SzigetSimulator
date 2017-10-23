@@ -8,9 +8,10 @@
  */
 class Stage {
 
-    constructor(posX, posY, audioSource) {
+    constructor(posX, posY, maxAudioDistance, audioSource) {
         this.posX = posX;
         this.posY = posY;
+        this.maxAudioDistance = maxAudioDistance;
         this.audioSource = audioSource;
     }
 
@@ -19,6 +20,15 @@ class Stage {
         let distanceY = Math.abs(this.posY - y);
         let distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
         return distance;
+    }
+
+    calculateMusicVolume(x, y) {
+        if (this.maxAudioDistance == 0) {
+            return 0;
+        }
+        let distance = this.distanceFrom(x, y);
+        var musicVolume = 1 - (distance / this.maxAudioDistance);
+        return musicVolume < 0 ? 0 : musicVolume;
     }
 
 }
