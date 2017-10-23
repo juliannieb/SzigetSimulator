@@ -15,6 +15,10 @@ class Stage {
         this.audioSource = audioSource;
     }
 
+    createAudio() {
+        this.audio = new Audio(this.audioSource);
+    }
+
     distanceFrom(x, y) {
         let distanceX = Math.abs(this.posX - x);
         let distanceY = Math.abs(this.posY - y);

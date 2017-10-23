@@ -10,22 +10,23 @@ class MusicController {
     
     constructor(stages) {
         this.stages = stages;
-        this.audios = [];
     }
 
     createAudios() {
         for (var i = 0; i < this.stages.length; i++) {
-            this.audios.push(this.newAudio(this.stages[i].audioSource));
+            this.stages[i].createAudio();
         }
     }
 
-    newAudio(audioSource) {
-        return new Audio(audioSource);
+    play() {
+        for (var i = 0; i < this.stages.length; i++) {
+            this.stages[i].audio.play();
+        }
     }
 
-    play() {
-        for (var i = 0; i < this.audios.length; i++) {
-            this.audios[i].play();
+    calculateVolume(x, y) {
+        for (var i = 0; i < this.stages.length; i++) {
+            this.stages[i].audio.volume = this.stages[i].calculateMusicVolume(x, y);
         }
     }
 
