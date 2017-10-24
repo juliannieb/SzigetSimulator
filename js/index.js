@@ -12,6 +12,9 @@ var planeGround;
 
 var musicController;
 
+let GROUND_WIDTH = 2000;
+let GROUND_HEIGHT = 1200;
+
 $( document ).ready(function(){
     init();
     addGround();  
@@ -61,7 +64,7 @@ function animate() {
  */
 function addGround() {
     // Create texture for ground.
-    var planeGeometry = new THREE.PlaneBufferGeometry( 2000, 1200 );
+    var planeGeometry = new THREE.PlaneBufferGeometry( GROUND_WIDTH, GROUND_HEIGHT );
     var loader = new THREE.TextureLoader();
     loader.setCrossOrigin('Anonymous');
     var planeTexture = loader.load( "https://files.gamebanana.com/img/ss/textures/573db60672a5c.jpg" );
@@ -86,8 +89,8 @@ function createStages() {
     var stages = [];
     // The different relative positions scales on four corners.
     var coordinatesScales = [[-1, 1, 1, -1], [1, -1, 1, -1], [1, -1, -1, 1], [-1, 1, -1, 1]];
-    stages.push(new Stage(planeGround, coordinatesScales[0], 10, "resources/TheXX_IDareYou.mp3"));    
-    stages.push(new Stage(planeGround, coordinatesScales[1], 10, "resources/TheKillers_ADustland Fairytale.mp3"));
+    stages.push(new Stage(planeGround, coordinatesScales[0], "resources/TheXX_IDareYou.mp3"));    
+    stages.push(new Stage(planeGround, coordinatesScales[1], "resources/TheKillers_ADustland Fairytale.mp3"));
     // Add stages to the scene.
     stages.forEach(function(stage) {
         scene.add( stage.stageMesh );

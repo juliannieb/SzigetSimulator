@@ -8,7 +8,7 @@
  */
 class Stage {
 
-    constructor(groundPlane, coordsScales, maxAudioDistance, audioSource) {
+    constructor(groundPlane, coordsScales, audioSource) {
         // Create the texture.    
         var loader = new THREE.TextureLoader();
         loader.setCrossOrigin('Anonymous');
@@ -31,10 +31,11 @@ class Stage {
         this.stageMesh.rotation.x = planeGround.rotation.x;
         this.stageMesh.castShadow = true;
         // Set variables for audio control.
-        this.posX = this.stageMesh.position.x;
-        this.posY = this.stageMesh.position.y;
-        this.maxAudioDistance = maxAudioDistance;
+        this.posX = this.stageMesh.position.x + this.width / 2;
+        this.posY = this.stageMesh.position.y + this.height / 2;
+        this.maxAudioDistance = this.distanceFrom(0, 0);
         this.audioSource = audioSource;
+        console.log(this.posX + ", " + this.posY);
     }
 
     createAudio() {
