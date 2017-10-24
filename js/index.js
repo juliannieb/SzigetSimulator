@@ -90,7 +90,9 @@ function createStages() {
     // The different relative positions scales on four corners.
     var coordinatesScales = [[-1, 1, 1, -1], [1, -1, 1, -1], [1, -1, -1, 1], [-1, 1, -1, 1]];
     stages.push(new Stage(planeGround, coordinatesScales[0], "resources/TheXX_IDareYou.mp3"));    
-    stages.push(new Stage(planeGround, coordinatesScales[1], "resources/TheKillers_ADustland Fairytale.mp3"));
+    stages.push(new Stage(planeGround, coordinatesScales[1], "resources/TheKillers_ADustlandFairytale.mp3"));
+    stages.push(new Stage(planeGround, coordinatesScales[2], "resources/30SecondsToMars_FromYesterday.mp3"));
+    stages.push(new Stage(planeGround, coordinatesScales[3], "resources/TheChainsmokers_Closer.mp3"));
     // Add stages to the scene.
     stages.forEach(function(stage) {
         scene.add( stage.stageMesh );
