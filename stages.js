@@ -36,6 +36,7 @@ function animate() {
 }
 
 function addGround() {
+    // Create texture for ground.
     var planeGeometry = new THREE.PlaneBufferGeometry( 2000, 1200 );
     var loader = new THREE.TextureLoader();
     loader.setCrossOrigin('Anonymous');
@@ -44,15 +45,12 @@ function addGround() {
         map:planeTexture, 
         side:THREE.DoubleSide 
     });
+    // Create mesh for ground.
     planeGround = new THREE.Mesh( planeGeometry, planeMaterial );
     planeGround.position.x = 0;
     planeGround.position.y = -30;    
-    //planeGround.position.z = -200;
-    //planeGround.rotation.x = 270 * Math.PI / 180;
     planeGround.receiveShadow = true;
     scene.add(planeGround);
-    console.log(planeGround.geometry.parameters);
-    console.log(planeGround.position);
 }
 
 function addStages() {
