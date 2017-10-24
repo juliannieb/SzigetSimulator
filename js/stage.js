@@ -8,9 +8,31 @@
  */
 class Stage {
 
-    constructor(posX, posY, maxAudioDistance, audioSource) {
-        this.posX = posX;
-        this.posY = posY;
+    constructor(groundPlane, coordsScales, maxAudioDistance, audioSource) {
+        // Create the texture.    
+        var loader = new THREE.TextureLoader();
+        loader.setCrossOrigin('Anonymous');
+        var stageTexture = loader.load( "https://previews.123rf.com/images/ditara/ditara1009/ditara100900016/7788244-Rusty-metal-texture-for-the-background-Stock-Photo-iron-rusty-sheet.jpg" );
+        var boxMaterial = new THREE.MeshStandardMaterial({ 
+            map:stageTexture, 
+            side:THREE.DoubleSide 
+        });
+        // Define stage measures based on groundPlane.
+        var planeHeight = planeGround.geometry.parameters.height;
+        var planeWidth = planeGround.geometry.parameters.width;
+        this.height = planeHeight/2 - planeHeight/6;
+        this.width = planeWidth/4;
+        // Define the mesh of the stage.
+        var geometry = new THREE.BoxBufferGeometry( this.width, this.height, 100 );
+        this.stageMesh = new THREE.Mesh(geometry, boxMaterial);
+        this.stageMesh.position.x = planeGround.position.x + (planeWidth/2*coordsScales[0]) + (this.width/2*coordsScales[1]);
+        this.stageMesh.position.y = planeGround.position.y + (planeHeight/2*coordsScales[2]) + (this.height/2*coordsScales[3]);
+        this.stageMesh.position.z = planeGround.position.z;
+        this.stageMesh.rotation.x = planeGround.rotation.x;
+        this.stageMesh.castShadow = true;
+        // Set variables for audio control.
+        this.posX = this.stageMesh.position.x;
+        this.posY = this.stageMesh.position.y;
         this.maxAudioDistance = maxAudioDistance;
         this.audioSource = audioSource;
     }

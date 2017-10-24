@@ -9,16 +9,14 @@ var currentX, currentY;
 // Variables for the scene.
 var scene, camera, renderer, light;
 var planeGround;
-var stages = [];
 
 var musicController;
 
 $( document ).ready(function(){
-    init();    
-
-    let stage1 = new Stage(0, 10, 10, "resources/TheXX_IDareYou.mp3");
-    let stage2 = new Stage(1, 5, 10, "resources/TheKillers_ADustland Fairytale.mp3");
-    let stages = [stage1, stage2];
+    init();
+    addGround();  
+    
+    let stages = createStages();
     musicController = new MusicController(stages);
     musicController.createAudios();
     currentX = 0;
@@ -47,13 +45,10 @@ function init() {
 
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.shadowMapEnabled = true;
+    renderer.shadowMap.enabled = true;
     renderer.shadowMapSoft = true;
 
     document.body.appendChild(renderer.domElement);
-
-    addGround();
-    //addStages();
 }
 
 function animate() {
@@ -80,6 +75,25 @@ function addGround() {
     planeGround.position.y = -30;    
     planeGround.receiveShadow = true;
     scene.add(planeGround);
+}
+
+/**
+ * Function that creates the stages.
+ * RETURNS:
+ *  - Array containing Stage objects.
+ */
+function createStages() {
+    var stages = [];
+    // The different relative positions scales on four corners.
+    var coordinatesScales = [[-1, 1, 1, -1], [1, -1, 1, -1], [1, -1, -1, 1], [-1, 1, -1, 1]];
+    stages.push(new Stage(planeGround, coordinatesScales[0], 10, "resources/TheXX_IDareYou.mp3"));    
+    stages.push(new Stage(planeGround, coordinatesScales[1], 10, "resources/TheKillers_ADustland Fairytale.mp3"));
+    // Add stages to the scene.
+    stages.forEach(function(stage) {
+        scene.add( stage.stageMesh );
+    });
+
+    return stages;
 }
 
 /**
