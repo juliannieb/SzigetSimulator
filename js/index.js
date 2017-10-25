@@ -247,18 +247,22 @@ function createCameras(stage){
 function addOnKeyPressedListener() {
     $(document).keydown(function(event){
         event.preventDefault();
-        if (event.keyCode == LEFT_KEY_CODE) {
+        if (event.keyCode == LEFT_KEY_CODE ||
+            event.keyCode == A) {
             currentX -= 1;
             moveLeft = true;
         }
-        else if (event.keyCode == UP_KEY_CODE) {
+        else if (event.keyCode == UP_KEY_CODE ||
+                 event.keyCode == W) {
             currentY += 1;
             moveForward = true;
         }
-        else if (event.keyCode == RIGHT_KEY_CODE) {
+        else if (event.keyCode == RIGHT_KEY_CODE ||
+                 event.keyCode == D) {
             moveRight = true;
         }
-        else if (event.keyCode == DOWN_KEY_CODE) {
+        else if (event.keyCode == DOWN_KEY_CODE ||
+                 event.keyCode == S) {
             moveBackward = true;
             currentY -= 1;
         } else if (event.keyCode == SPACE){
@@ -273,16 +277,20 @@ function addOnKeyPressedListener() {
 function addOnKeyLiftedListener() {
     $(document).keyup(function(event){
         event.preventDefault();
-        if (event.keyCode == LEFT_KEY_CODE) {
+        if (event.keyCode == LEFT_KEY_CODE ||
+            event.keyCode == A) {
             moveLeft = false;
         }
-        else if (event.keyCode == UP_KEY_CODE) {
+        else if (event.keyCode == UP_KEY_CODE ||
+                 event.keyCode == W) {
             moveForward = false;
         }
-        else if (event.keyCode == RIGHT_KEY_CODE) {
+        else if (event.keyCode == RIGHT_KEY_CODE ||
+                 event.keyCode == D) {
             moveRight = false;
         }
-        else if (event.keyCode == DOWN_KEY_CODE) {
+        else if (event.keyCode == DOWN_KEY_CODE ||
+                 event.keyCode == S) {
             moveBackward = false;
         }
         console.log(currentX + ", " + currentY);
