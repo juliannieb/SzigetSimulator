@@ -11,21 +11,20 @@ function createGodViewCamera(){
     return orthoCam;
 }
 
-function createCharCamera(reference){
+function createCharCamera(){
     camera  = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
     camera.position.z = 10;
     camera.up = new THREE.Vector3(0, 0, 1);
     return camera;
 }
 
-function createDJCamera(reference, stage){
-    camera  = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 10000);
-    camera.position.z = 30;
-    camera.position.x = 350;
-    // camera.position = stage.position
+function createDJCamera(reference){
+    camera  = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+    camera.position.z = 100;
+    camera.position.x = 600;
+    camera.position.y = 350;
     camera.up = new THREE.Vector3(0, 0, 1);
     camera.lookAt(reference.position)
-    // camera.position(stage.stageMesh.position)
     return camera;
 }
 

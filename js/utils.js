@@ -4,3 +4,4 @@ let RIGHT_KEY_CODE = 39;
 let DOWN_KEY_CODE = 40;
 let MIN_CAMERA = 49;
 let MAX_CAMERA = 51;
+let SPACE = 32;
