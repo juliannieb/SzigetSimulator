@@ -5,10 +5,14 @@
 
 // @TODO: remove these variables as they are just for testing the volume control
 var currentX, currentY;
-
+var width = window.innerWidth;
+var height = window.innerHeight;
+var cube;
 // Variables for the scene.
+var cameras = [];
 var scene, camera, renderer, light;
 var planeGround;
+var activeCamera;
 
 var musicController;
 
@@ -20,6 +24,8 @@ $( document ).ready(function(){
     addGround();  
     
     let stages = createStages();
+    addReference()
+    createCameras(stages[0]);
     musicController = new MusicController(stages);
     musicController.createAudios();
     currentX = 0;
@@ -27,7 +33,7 @@ $( document ).ready(function(){
     musicController.calculateVolume(currentX, currentY);
     musicController.play();
     addOnKeyPressedListener();
-
+    addCamaraSelectListener();
     animate();
 })
 
@@ -43,9 +49,11 @@ function init() {
     light.position.set(0, 1, 0).normalize();
     scene.add(light);
 
-    camera  = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
-    camera.position.z = 1000;
-
+    // camera = new Three.OrthographicCamera(window.innerWidth / -2, )
+    // camera = new THREE.OrthographicCamera( width / - 1, width / 1, height / 1, height / - 1, 1, 10000 );
+    // camera  = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+    // camera.position.z = 1000;
+    // activeCamera = camera;
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
@@ -56,7 +64,20 @@ function init() {
 
 function animate() {
     requestAnimationFrame(animate);
-    renderer.render(scene, camera);
+    renderer.render(scene, activeCamera);
+}
+
+
+/** 
+ * Add reference
+ */
+
+function addReference() {
+    // Create a red block on the center
+    var geometry = new THREE.BoxGeometry( 100, 100, 100 );
+    var material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
+    cube = new THREE.Mesh( geometry, material );
+    scene.add( cube );
 }
 
 /**
@@ -101,6 +122,18 @@ function createStages() {
     return stages;
 }
 
+/** 
+ * Funciton that creates the cameras
+ * Returns:
+ * - Array containing the Camera objects.
+ */
+function createCameras(stage){
+    cameras.push(createGodViewCamera());
+    cameras.push(createCharCamera(cube));
+    cameras.push(createDJCamera(cube, stage));
+    activeCamera = cameras[0]
+}
+
 /**
  * Add a listener for the keyboard to change current position.
  */
@@ -121,5 +154,18 @@ function addOnKeyPressedListener() {
         }
         console.log(currentX + ", " + currentY);
         musicController.calculateVolume(currentX, currentY);
+    });
+}
+
+/**
+ * Add a listener for the keyboard to change current camera.
+ */
+function addCamaraSelectListener() {
+    $(document).keydown(function(event){
+        event.preventDefault();
+        if(event.keyCode >= MIN_CAMERA && event.key <= MAX_CAMERA){
+            console.log(event.keyCode - MIN_CAMERA);
+            activeCamera = cameras[event.keyCode - MIN_CAMERA];
+        }
     });
 }
