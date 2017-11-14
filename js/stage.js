@@ -51,8 +51,8 @@ class Stage {
         var geometry = new THREE.BoxBufferGeometry(setWidth, setHeight, setDepth);
         var material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
         var djSetMesh = new THREE.Mesh(geometry, material);
-        djSetMesh.position.x = this.posX;
-        djSetMesh.position.y = this.posY;
+        djSetMesh.position.x = this.stageMesh.position.x;
+        djSetMesh.position.y = this.stageMesh.position.y;
         djSetMesh.position.z = this.depth + setDepth/2;
         return djSetMesh;
     }
