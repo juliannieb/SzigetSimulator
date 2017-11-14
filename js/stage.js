@@ -37,6 +37,7 @@ class Stage {
         this.maxAudioDistance = this.distanceFrom(0, 0);
         this.audioSource = audioSource;
         this.djSetMesh = this.createDJSet();
+        this.posterMesh = this.createArtistPoster();
         console.log(this.posX + ", " + this.posY);
     }
 
@@ -44,6 +45,11 @@ class Stage {
         this.audio = new Audio(this.audioSource);
     }
 
+    /**
+     * Creates the DJ's set in the center of the stage
+     * RETURNS:
+     *  - mesh of set
+     */
     createDJSet() {
         var setWidth = this.width / 5;
         var setHeight = this.height / 5;
@@ -55,6 +61,25 @@ class Stage {
         djSetMesh.position.y = this.stageMesh.position.y;
         djSetMesh.position.z = this.depth + setDepth/2;
         return djSetMesh;
+    }
+
+    /**
+     * Creates DJ's poster and position it behing the set
+     * RETURNS:
+     * - mesh of poster
+     */
+    createArtistPoster() {
+        var posterWidth = this.width / 3;
+        var posterHeight = this.height * 1.5;
+        var geometry = new THREE.PlaneBufferGeometry(posterWidth, posterHeight);
+        var material = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide });
+        var posterMesh = new THREE.Mesh(geometry, material);
+        posterMesh.position.x = this.djSetMesh.position.x - this.djSetMesh.geometry.parameters.width/2;
+        posterMesh.position.y = this.djSetMesh.position.y - this.djSetMesh.geometry.parameters.height/2;
+        posterMesh.position.z = this.djSetMesh.position.z + 50;
+        posterMesh.rotateX( - Math.PI / 2);
+        console.log(posterMesh);
+        return posterMesh;
     }
 
     distanceFrom(x, y) {
