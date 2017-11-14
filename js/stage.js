@@ -69,13 +69,14 @@ class Stage {
      * - mesh of poster
      */
     createArtistPoster(posScale) {
-        var posterWidth = this.width / 2;
-        var posterHeight = this.depth * 2.5;
+        var posterWidth = this.width / 1.5;
+        var posterHeight = this.depth * 4;
+        var distanceToSet = 50;
         var geometry = new THREE.PlaneBufferGeometry(posterWidth, posterHeight);
         var material = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide });
         var posterMesh = new THREE.Mesh(geometry, material);
-        posterMesh.position.x = this.djSetMesh.position.x - this.djSetMesh.geometry.parameters.width/2*posScale;
-        posterMesh.position.y = this.djSetMesh.position.y - this.djSetMesh.geometry.parameters.height/2;
+        posterMesh.position.x = this.djSetMesh.position.x - this.djSetMesh.geometry.parameters.width/2*posScale - distanceToSet*posScale;
+        posterMesh.position.y = this.stageMesh.position.y;
         posterMesh.position.z = this.depth + posterHeight/2;
         posterMesh.rotateX(-Math.PI / 2);
         posterMesh.rotateY(-Math.PI / 2);
