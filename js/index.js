@@ -223,7 +223,7 @@ function createStages() {
     // Add stages to the scene.
     stages.forEach(function(stage) {
         scene.add( stage.stageMesh );
-        //scene.add(stage.djSetMesh);
+        scene.add(stage.djSetMesh);
         scene.add(stage.posterMesh);
     });
 

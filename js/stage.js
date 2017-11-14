@@ -22,7 +22,7 @@ class Stage {
         var planeWidth = planeGround.geometry.parameters.width;
         this.height = planeHeight/2 - planeHeight/6;
         this.width = planeWidth/4;
-        this.depth = 70;
+        this.depth = 30;
         // Define the mesh of the stage.
         var geometry = new THREE.BoxBufferGeometry( this.width, this.height, this.depth );
         this.stageMesh = new THREE.Mesh(geometry, boxMaterial);
@@ -37,7 +37,7 @@ class Stage {
         this.maxAudioDistance = this.distanceFrom(0, 0);
         this.audioSource = audioSource;
         this.djSetMesh = this.createDJSet();
-        this.posterMesh = this.createArtistPoster();
+        this.posterMesh = this.createArtistPoster(coordsScales[1]);
         console.log(this.posX + ", " + this.posY);
     }
 
@@ -68,16 +68,17 @@ class Stage {
      * RETURNS:
      * - mesh of poster
      */
-    createArtistPoster() {
-        var posterWidth = this.width / 3;
-        var posterHeight = this.height * 1.5;
+    createArtistPoster(posScale) {
+        var posterWidth = this.width / 2;
+        var posterHeight = this.depth * 2.5;
         var geometry = new THREE.PlaneBufferGeometry(posterWidth, posterHeight);
         var material = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide });
         var posterMesh = new THREE.Mesh(geometry, material);
-        posterMesh.position.x = this.djSetMesh.position.x - this.djSetMesh.geometry.parameters.width/2;
+        posterMesh.position.x = this.djSetMesh.position.x - this.djSetMesh.geometry.parameters.width/2*posScale;
         posterMesh.position.y = this.djSetMesh.position.y - this.djSetMesh.geometry.parameters.height/2;
-        posterMesh.position.z = this.djSetMesh.position.z + 50;
-        posterMesh.rotateX( - Math.PI / 2);
+        posterMesh.position.z = this.depth + posterHeight/2;
+        posterMesh.rotateX(-Math.PI / 2);
+        posterMesh.rotateY(-Math.PI / 2);
         console.log(posterMesh);
         return posterMesh;
     }
