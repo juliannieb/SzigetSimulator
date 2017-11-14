@@ -96,7 +96,8 @@ if ( havePointerLock ) {
 
 $( document ).ready(function(){
     init();
-    addGround();  
+    addGround();
+    addBackground();
     
     let stages = createStages();
     addReference()
@@ -205,6 +206,24 @@ function addGround() {
     planeGround.position.y = -30;    
     planeGround.receiveShadow = true;
     scene.add(planeGround);
+}
+
+
+function addBackground() {
+    var geometry = new THREE.CubeGeometry(10000, 10000, 10000);
+    var loader = new THREE.TextureLoader();
+    loader.setCrossOrigin('Anonymous');
+    var cubeMaterials = [
+        new THREE.MeshBasicMaterial( { map: loader.load("resources/img/skybox1/front.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load("resources/img/skybox1/back.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load("resources/img/skybox1/up.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load("resources/img/skybox1/down.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load("resources/img/skybox1/right.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load("resources/img/skybox1/left.png"), side: THREE.DoubleSide } )
+    ];
+    var cubeMaterial = new THREE.MeshFaceMaterial(cubeMaterials);
+    var cube = new THREE.Mesh(geometry, cubeMaterial);
+    scene.add(cube);
 }
 
 /**
