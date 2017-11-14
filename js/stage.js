@@ -22,12 +22,13 @@ class Stage {
         var planeWidth = planeGround.geometry.parameters.width;
         this.height = planeHeight/2 - planeHeight/6;
         this.width = planeWidth/4;
+        this.depth = 70;
         // Define the mesh of the stage.
-        var geometry = new THREE.BoxBufferGeometry( this.width, this.height, 100 );
+        var geometry = new THREE.BoxBufferGeometry( this.width, this.height, this.depth );
         this.stageMesh = new THREE.Mesh(geometry, boxMaterial);
         this.stageMesh.position.x = planeGround.position.x + (planeWidth/2*coordsScales[0]) + (this.width/2*coordsScales[1]);
         this.stageMesh.position.y = planeGround.position.y + (planeHeight/2*coordsScales[2]) + (this.height/2*coordsScales[3]);
-        this.stageMesh.position.z = planeGround.position.z;
+        this.stageMesh.position.z = this.depth/2;
         this.stageMesh.rotation.x = planeGround.rotation.x;
         this.stageMesh.castShadow = true;
         // Set variables for audio control.
@@ -35,11 +36,25 @@ class Stage {
         this.posY = this.stageMesh.position.y + this.height / 2;
         this.maxAudioDistance = this.distanceFrom(0, 0);
         this.audioSource = audioSource;
+        this.djSetMesh = this.createDJSet();
         console.log(this.posX + ", " + this.posY);
     }
 
     createAudio() {
         this.audio = new Audio(this.audioSource);
+    }
+
+    createDJSet() {
+        var setWidth = this.width / 5;
+        var setHeight = this.height / 5;
+        var setDepth = 30;
+        var geometry = new THREE.BoxBufferGeometry(setWidth, setHeight, setDepth);
+        var material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+        var djSetMesh = new THREE.Mesh(geometry, material);
+        djSetMesh.position.x = this.posX;
+        djSetMesh.position.y = this.posY;
+        djSetMesh.position.z = this.depth + setDepth/2;
+        return djSetMesh;
     }
 
     distanceFrom(x, y) {
