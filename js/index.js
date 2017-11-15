@@ -235,14 +235,15 @@ function createStages() {
     var stages = [];
     // The different relative positions scales on four corners.
     var coordinatesScales = [[-1, 1, 1, -1], [1, -1, 1, -1], [1, -1, -1, 1], [-1, 1, -1, 1]];
-    stages.push(new Stage(planeGround, coordinatesScales[0], "resources/TheXX_IDareYou.mp3"));    
-    stages.push(new Stage(planeGround, coordinatesScales[1], "resources/TheKillers_ADustlandFairytale.mp3"));
-    stages.push(new Stage(planeGround, coordinatesScales[2], "resources/30SecondsToMars_FromYesterday.mp3"));
-    stages.push(new Stage(planeGround, coordinatesScales[3], "resources/TheChainsmokers_Closer.mp3"));
+    stages.push(new Stage(planeGround, coordinatesScales[0], "resources/TheXX_IDareYou.mp3", "https://thump-images.vice.com/images/2015/1/27/10-canciones-que-suenan-mejor-en-remix-que-en-las-originales-1422361276148.jpg"));    
+    stages.push(new Stage(planeGround, coordinatesScales[1], "resources/TheKillers_ADustlandFairytale.mp3", "http://ksassets.timeincuk.net/wp/uploads/sites/55/2008/11/GettyImages-187605824-920x584.jpg"));
+    stages.push(new Stage(planeGround, coordinatesScales[2], "resources/30SecondsToMars_FromYesterday.mp3", "http://4.bp.blogspot.com/-NSdY_azkfV8/UkgzD3WtIuI/AAAAAAAAANU/A8zhQafsyiY/s1600/30-seconds-to-mars-concert-jared-leto-my-baby-people-Favim.com-333248.jpg"));
+    stages.push(new Stage(planeGround, coordinatesScales[3], "resources/TheChainsmokers_Closer.mp3", "http://promotionmusicnews.com/promotionmusicnews.com/html/wp-content/uploads/The-Chainsmokers-2017-Album-Tour.jpg"));
     // Add stages to the scene.
     stages.forEach(function(stage) {
         scene.add( stage.stageMesh );
         scene.add(stage.djSetMesh);
+        scene.add(stage.posterMesh);
     });
 
     return stages;
