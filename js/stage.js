@@ -12,11 +12,14 @@ class Stage {
         // Create the texture.    
         var loader = new THREE.TextureLoader();
         loader.setCrossOrigin('Anonymous');
-        var stageTexture = loader.load( "https://previews.123rf.com/images/ditara/ditara1009/ditara100900016/7788244-Rusty-metal-texture-for-the-background-Stock-Photo-iron-rusty-sheet.jpg" );
+        var stageTexture = loader.load( "http://cdn.mysitemyway.com/etc-mysitemyway/webtreats/assets/posts/873/full/tileable-metal-textures-8.jpg" );
         var boxMaterial = new THREE.MeshStandardMaterial({ 
             map:stageTexture, 
             side:THREE.DoubleSide 
         });
+        stageTexture.wrapS = THREE.RepeatWrapping;
+        stageTexture.wrapT = THREE.RepeatWrapping;
+        stageTexture.repeat.set( 1, 10 );
         // Define stage measures based on groundPlane.
         var planeHeight = planeGround.geometry.parameters.height;
         var planeWidth = planeGround.geometry.parameters.width;
@@ -30,7 +33,7 @@ class Stage {
         this.stageMesh.position.y = planeGround.position.y + (planeHeight/2*coordsScales[2]) + (this.height/2*coordsScales[3]);
         this.stageMesh.position.z = this.depth/2;
         this.stageMesh.rotation.x = planeGround.rotation.x;
-        this.stageMesh.castShadow = true;
+        this.stageMesh.castShadow = true;        
         // Set variables for audio control.
         this.posX = this.stageMesh.position.x + this.width / 2;
         this.posY = this.stageMesh.position.y + this.height / 2;
