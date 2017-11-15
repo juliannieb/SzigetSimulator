@@ -97,7 +97,7 @@ if ( havePointerLock ) {
 $( document ).ready(function(){
     init();
     addGround();
-    addBackground();
+    addSkybox();
     
     let stages = createStages();
     addReference()
@@ -209,7 +209,7 @@ function addGround() {
 }
 
 
-function addBackground() {
+function addSkybox() {
     var geometry = new THREE.CubeGeometry(2000, 2000, 2000);
     var loader = new THREE.TextureLoader();
     loader.setCrossOrigin('Anonymous');
