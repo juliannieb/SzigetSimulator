@@ -178,7 +178,7 @@ function animate() {
 
 function addReference() {
     // Create a red block on the center
-    var geometry = new THREE.BoxGeometry( 100, 100, 100 );
+    var geometry = new THREE.BoxGeometry( 0.01, 0.01, 0.01 );
     var material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
     cube = new THREE.Mesh( geometry, material );
     scene.add( cube );
