@@ -193,7 +193,6 @@ function addGround() {
     var loader = new THREE.TextureLoader();
     loader.setCrossOrigin('Anonymous');
     var planeTexture = loader.load( "https://files.gamebanana.com/img/ss/textures/573db60672a5c.jpg" );
-    //var planeTexture = loader.load( "https://github.com/juliannieb/SzigetSimulator/blob/task/addBackground/resources/img/skybox1/front.png" );
     planeTexture.wrapS = THREE.RepeatWrapping;
     planeTexture.wrapT = THREE.RepeatWrapping;
     planeTexture.repeat.set( 100, 100 );
@@ -211,7 +210,7 @@ function addGround() {
 
 
 function addBackground() {
-    var geometry = new THREE.CubeGeometry(200, 200, 200);
+    var geometry = new THREE.CubeGeometry(2000, 2000, 2000);
     var loader = new THREE.TextureLoader();
     loader.setCrossOrigin('Anonymous');
     var cubeMaterials = [
