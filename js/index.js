@@ -12,7 +12,7 @@ var cube;
 // Variables for the scene.
 var cameras = [];
 var scene, camera, renderer, light;
-var planeGround;
+var planeGround, skybox;
 var activeCamera;
 
 var musicController;
@@ -97,7 +97,7 @@ if ( havePointerLock ) {
 $( document ).ready(function(){
     init();
     addGround();
-    addSkybox();
+    setSkybox("http://aleph.com.mx/squanch/skybox4/");
     
     let stages = createStages();
     addReference()
@@ -111,6 +111,7 @@ $( document ).ready(function(){
     addOnKeyPressedListener();
     addOnKeyLiftedListener();
     addCamaraSelectListener();
+    addSkyboxSelectListener();
     animate();
 })
 
@@ -209,21 +210,25 @@ function addGround() {
 }
 
 
-function addSkybox() {
+function setSkybox(source) {
+    if (skybox != null) {
+        scene.remove(skybox);
+        skybox = null;
+    }
     var geometry = new THREE.CubeGeometry(2000, 2000, 2000);
     var loader = new THREE.TextureLoader();
     loader.setCrossOrigin('Anonymous');
     var cubeMaterials = [
-        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox4/front.png"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox4/back.png"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox4/up.png"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox4/down.png"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox4/right.png"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox4/left.png"), side: THREE.DoubleSide } )
+        new THREE.MeshBasicMaterial( { map: loader.load(source + "front.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load(source + "back.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load(source + "up.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load(source + "down.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load(source + "right.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load(source + "left.png"), side: THREE.DoubleSide } )
     ];
-    var cube = new THREE.Mesh(geometry, cubeMaterials);
-    cube.rotation.x = Math.PI / 2;
-    scene.add(cube);
+    skybox = new THREE.Mesh(geometry, cubeMaterials);
+    skybox.rotation.x = Math.PI / 2;
+    scene.add(skybox);
 }
 
 /**
@@ -327,9 +332,29 @@ function addOnKeyLiftedListener() {
 function addCamaraSelectListener() {
     $(document).keydown(function(event){
         event.preventDefault();
-        if(event.keyCode >= MIN_CAMERA && event.key <= MAX_CAMERA){
+        if(event.keyCode >= MIN_CAMERA && event.keyCode <= MAX_CAMERA){
+            console.log("Camera " + event.keyCode);
             console.log(event.keyCode - MIN_CAMERA);
             activeCamera = cameras[event.keyCode - MIN_CAMERA];
+        }
+    });
+}
+
+/**
+ * Add a listener for the keyboard to change current skybox.
+ */
+function addSkyboxSelectListener() {
+    $(document).keydown(function(event){
+        event.preventDefault();
+        console.log("Simon " + event.keyCode);
+        if(event.keyCode == SKYBOX1_KEY_CODE){
+            setSkybox("http://aleph.com.mx/squanch/skybox1/");
+        }
+        else if(event.keyCode == SKYBOX2_KEY_CODE){
+            setSkybox("http://aleph.com.mx/squanch/skybox3/");
+        }
+        else if(event.keyCode == SKYBOX3_KEY_CODE){
+            setSkybox("http://aleph.com.mx/squanch/skybox4/");
         }
     });
 }

@@ -9,3 +9,6 @@ let S = 83;
 let D = 68;
 let W = 87;
 let SPACE = 32;
+let SKYBOX1_KEY_CODE = 55;
+let SKYBOX2_KEY_CODE = 56;
+let SKYBOX3_KEY_CODE = 57;
