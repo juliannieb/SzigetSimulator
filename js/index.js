@@ -214,12 +214,12 @@ function addBackground() {
     var loader = new THREE.TextureLoader();
     loader.setCrossOrigin('Anonymous');
     var cubeMaterials = [
-        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox1/front.png"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox1/back.png"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox1/up.png"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox1/down.png"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox1/right.png"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox1/left.png"), side: THREE.DoubleSide } )
+        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox4/front.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox4/back.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox4/up.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox4/down.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox4/right.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox4/left.png"), side: THREE.DoubleSide } )
     ];
     var cube = new THREE.Mesh(geometry, cubeMaterials);
     cube.rotation.x = Math.PI / 2;
@@ -257,7 +257,6 @@ function createStages() {
 function createCameras(stage){
     cameras.push(createGodViewCamera());
     mcamera = createCharCamera();
-    mcamera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
     controls = new THREE.PointerLockControls( mcamera );
     cameras.push(mcamera);
     scene.add( controls.getObject());
