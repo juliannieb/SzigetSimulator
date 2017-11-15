@@ -53,12 +53,19 @@ class Stage {
      * RETURNS:
      *  - mesh of set
      */
-    createDJSet() {
+    createDJSet() {        
+        var loader = new THREE.TextureLoader();
+        loader.setCrossOrigin('Anonymous');
+        var posterTexture = loader.load("https://static8.depositphotos.com/1000635/806/v/950/depositphotos_8063018-stock-illustration-metal-grid-seamless-pattern.jpg");
+        posterTexture.flipY = false;
+        var material = new THREE.MeshStandardMaterial({ 
+            map:posterTexture, 
+            side:THREE.DoubleSide 
+        });
         var setWidth = this.width / 5;
         var setHeight = this.height / 5;
         var setDepth = 30;
-        var geometry = new THREE.BoxBufferGeometry(setWidth, setHeight, setDepth);
-        var material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+        var geometry = new THREE.BoxBufferGeometry(setWidth, setHeight, setDepth);        
         var djSetMesh = new THREE.Mesh(geometry, material);
         djSetMesh.position.x = this.stageMesh.position.x;
         djSetMesh.position.y = this.stageMesh.position.y;
