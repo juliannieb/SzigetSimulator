@@ -214,26 +214,16 @@ function addBackground() {
     var geometry = new THREE.CubeGeometry(200, 200, 200);
     var loader = new THREE.TextureLoader();
     loader.setCrossOrigin('Anonymous');
-    /*
     var cubeMaterials = [
-        new THREE.MeshBasicMaterial( { map: loader.load("https://github.com/juliannieb/SzigetSimulator/blob/task/addBackground/resources/img/skybox1/front.png"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("https://github.com/juliannieb/SzigetSimulator/blob/task/addBackground/resources/img/skybox1/back.png"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("https://github.com/juliannieb/SzigetSimulator/blob/task/addBackground/resources/img/skybox1/up.png"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("https://github.com/juliannieb/SzigetSimulator/blob/task/addBackground/resources/img/skybox1/down.png"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("https://github.com/juliannieb/SzigetSimulator/blob/task/addBackground/resources/img/skybox1/right.png"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("https://github.com/juliannieb/SzigetSimulator/blob/task/addBackground/resources/img/skybox1/left.png"), side: THREE.DoubleSide } )
+        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox1/front.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox1/back.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox1/up.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox1/down.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox1/right.png"), side: THREE.DoubleSide } ),
+        new THREE.MeshBasicMaterial( { map: loader.load("http://aleph.com.mx/squanch/skybox1/left.png"), side: THREE.DoubleSide } )
     ];
-    */
-    var cubeMaterials = [
-        new THREE.MeshBasicMaterial( { map: loader.load("https://www.keithlantz.net/wp-content/uploads/2011/10/skybox_texture.jpg"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("https://www.keithlantz.net/wp-content/uploads/2011/10/skybox_texture.jpg"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("https://www.keithlantz.net/wp-content/uploads/2011/10/skybox_texture.jpg"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("https://www.keithlantz.net/wp-content/uploads/2011/10/skybox_texture.jpg"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("https://www.keithlantz.net/wp-content/uploads/2011/10/skybox_texture.jpg"), side: THREE.DoubleSide } ),
-        new THREE.MeshBasicMaterial( { map: loader.load("https://www.keithlantz.net/wp-content/uploads/2011/10/skybox_texture.jpg"), side: THREE.DoubleSide } )
-    ];
-    //var cubeMaterial = new THREE.MeshFaceMaterial(cubeMaterials);
     var cube = new THREE.Mesh(geometry, cubeMaterials);
+    cube.rotation.x = Math.PI / 2;
     scene.add(cube);
 }
 
