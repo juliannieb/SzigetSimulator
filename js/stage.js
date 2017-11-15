@@ -8,7 +8,7 @@
  */
 class Stage {
 
-    constructor(groundPlane, coordsScales, audioSource) {
+    constructor(groundPlane, coordsScales, audioSource, posterSource) {
         // Create the texture.    
         var loader = new THREE.TextureLoader();
         loader.setCrossOrigin('Anonymous');
@@ -37,7 +37,7 @@ class Stage {
         this.maxAudioDistance = this.distanceFrom(0, 0);
         this.audioSource = audioSource;
         this.djSetMesh = this.createDJSet();
-        this.posterMesh = this.createArtistPoster(coordsScales[1]);
+        this.posterMesh = this.createArtistPoster(coordsScales[1], posterSource);
         console.log(this.posX + ", " + this.posY);
     }
 
@@ -68,18 +68,27 @@ class Stage {
      * RETURNS:
      * - mesh of poster
      */
-    createArtistPoster(posScale) {
-        var posterWidth = this.width / 1.5;
-        var posterHeight = this.depth * 4;
+    createArtistPoster(posScale, posterURL) {
+        var loader = new THREE.TextureLoader();
+        loader.setCrossOrigin('Anonymous');
+        var posterTexture = loader.load(posterURL);
+        posterTexture.flipY = false;
+        var material = new THREE.MeshStandardMaterial({ 
+            map:posterTexture, 
+            side:THREE.DoubleSide 
+        });
+        var posterWidth = this.width / 1.25;
+        var posterHeight = this.depth * 5;
         var distanceToSet = 50;
         var geometry = new THREE.PlaneBufferGeometry(posterWidth, posterHeight);
-        var material = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide });
+        var material = new THREE.MeshLambertMaterial({ map : posterTexture });
         var posterMesh = new THREE.Mesh(geometry, material);
         posterMesh.position.x = this.djSetMesh.position.x - this.djSetMesh.geometry.parameters.width/2*posScale - distanceToSet*posScale;
         posterMesh.position.y = this.stageMesh.position.y;
         posterMesh.position.z = this.depth + posterHeight/2;
         posterMesh.rotateX(-Math.PI / 2);
         posterMesh.rotateY(-Math.PI / 2);
+        posterMesh.material.side = THREE.DoubleSide;
         console.log(posterMesh);
         return posterMesh;
     }
