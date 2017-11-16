@@ -1,0 +1,24 @@
+# OBJ Material Export by Luxion KeyShot
+
+newmtl Steel Ultra Scratched
+Kd 0.5 0.5 0.5
+
+newmtl light_inside_bar
+Kd 0.2 0.3 0.5
+Ks 0 0 0
+
+newmtl Anodized Rough Blue #1
+Kd 0 0 0
+Ks 5.29438e-006 0.166667 0.5
+
+newmtl Anodized Red
+Kd 0 0 0
+Ks 0.599999 0.0180002 0.0277019
+
+newmtl Anodized Rough Orange #1
+Kd 0 0 0
+Ks 0.79945 0.32781 0.0339682
+
+newmtl Anodized Rough Black
+Kd 0 0 0
+Ks 0 0 0

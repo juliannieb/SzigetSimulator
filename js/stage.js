@@ -25,7 +25,7 @@ class Stage {
         var planeWidth = planeGround.geometry.parameters.width;
         this.height = planeHeight/2 - planeHeight/6;
         this.width = planeWidth/4;
-        this.depth = 30;
+        this.depth = 20;
         // Define the mesh of the stage.
         var geometry = new THREE.BoxBufferGeometry( this.width, this.height, this.depth );
         this.stageMesh = new THREE.Mesh(geometry, boxMaterial);
@@ -40,6 +40,7 @@ class Stage {
         this.maxAudioDistance = this.distanceFrom(0, 0);
         this.audioSource = audioSource;
         this.djSetMesh = this.createDJSet();
+        this.createStage();
         this.posterMesh = this.createArtistPoster(coordsScales[1], posterSource);
         console.log(this.posX + ", " + this.posY);
     }
@@ -69,8 +70,41 @@ class Stage {
         var djSetMesh = new THREE.Mesh(geometry, material);
         djSetMesh.position.x = this.stageMesh.position.x;
         djSetMesh.position.y = this.stageMesh.position.y;
-        djSetMesh.position.z = this.depth + setDepth/2;
+        djSetMesh.position.z = this.depth + setDepth/2 + 20;
         return djSetMesh;
+    }
+
+    createStage() {
+        var onProgress = function ( xhr ) {
+            if ( xhr.lengthComputable ) {
+                var percentComplete = xhr.loaded / xhr.total * 100;
+                console.log( Math.round(percentComplete, 2) + '% downloaded' );
+            }
+        };
+    
+        var onError = function ( xhr ) { };
+    
+        var mtlLoader = new THREE.MTLLoader();
+        mtlLoader.setPath( 'resources/' );
+        var stageMesh = this.stageMesh;
+        var depth = this.depth;
+        mtlLoader.load( 'renderedStage.mtl', function( materials ) {
+            materials.preload();
+            var objLoader = new THREE.OBJLoader();
+            objLoader.setMaterials( materials );
+            objLoader.setPath( 'resources/' );
+            objLoader.load( 'renderedStage.obj', function ( object ) {
+                object.rotation.x = Math.PI / 2;
+                object.rotation.y = Math.PI / 2;
+                object.position.x = stageMesh.position.x;
+                object.position.y = stageMesh.position.y;
+                object.position.z += depth;
+                object.scale.x = 15;
+                object.scale.y = 15;
+                object.scale.z = 15;
+                scene.add( object );
+            }, onProgress, onError );
+        });
     }
 
     /**
