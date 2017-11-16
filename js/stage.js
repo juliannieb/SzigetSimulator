@@ -122,7 +122,7 @@ class Stage {
             side:THREE.DoubleSide 
         });
         var posterWidth = this.width / 1.25;
-        var posterHeight = this.depth * 5;
+        var posterHeight = posterWidth / 2;
         var distanceToSet = 50;
         var geometry = new THREE.PlaneBufferGeometry(posterWidth, posterHeight);
         var material = new THREE.MeshLambertMaterial({ map : posterTexture });
