@@ -100,6 +100,7 @@ $( document ).ready(function(){
     setSkybox("http://aleph.com.mx/squanch/skybox4/");
     
     let stages = createStages();
+    //createRestRooms();
     addReference()
     createCameras(stages[0]);
     musicController = new MusicController(stages);
@@ -246,12 +247,48 @@ function createStages() {
     stages.push(new Stage(planeGround, coordinatesScales[3], "resources/TheChainsmokers_Closer.mp3", "http://promotionmusicnews.com/promotionmusicnews.com/html/wp-content/uploads/The-Chainsmokers-2017-Album-Tour.jpg"));
     // Add stages to the scene.
     stages.forEach(function(stage) {
-        scene.add( stage.stageMesh );
+        scene.add(stage.stageMesh);
         scene.add(stage.djSetMesh);
         scene.add(stage.posterMesh);
     });
 
     return stages;
+}
+
+/**
+ * Function that creates the 3D models of restrooms.
+ */
+function createRestRooms() {
+    var onProgress = function ( xhr ) {
+        if ( xhr.lengthComputable ) {
+            var percentComplete = xhr.loaded / xhr.total * 100;
+            console.log( Math.round(percentComplete, 2) + '% Stage downloaded' );
+        }
+    };
+
+    var onError = function ( xhr ) { };
+
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.setPath( 'resources/' );
+    mtlLoader.load( 'bathroom.mtl', function( materials ) {
+        materials.preload();
+        var objLoader = new THREE.OBJLoader();
+        objLoader.setMaterials( materials );
+        objLoader.setPath( 'resources/' );
+        objLoader.load( 'bathroom.obj', function ( object ) {
+            object.rotateX(Math.PI / 2);
+            var planeHeight = planeGround.geometry.parameters.height;
+            var planeWidth = planeGround.geometry.parameters.width;
+            object.position.x = planeGround.position.x + planeWidth/2;
+            object.position.y = planeGround.position.y + planeHeight/2;
+            object.position.z = 100;
+            //object.scale.x = 15;
+            //object.scale.y = 15;
+            //object.scale.z = 15;
+            console.log("Bathroom loaded!");
+            scene.add(object);
+        }, onProgress, onError );
+    });
 }
 
 /** 
