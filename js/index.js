@@ -11,7 +11,7 @@ var cube;
 
 // Variables for the scene.
 var cameras = [];
-var scene, camera, renderer, light;
+var scene, camera, renderer, light, composer;
 var planeGround, skybox;
 var activeCamera;
 
@@ -100,8 +100,7 @@ $( document ).ready(function(){
     setSkybox("http://aleph.com.mx/squanch/skybox4/");
     
     let stages = createStages();
-    addReference()
-    createCameras(stages[0]);
+    
     musicController = new MusicController(stages);
     musicController.createAudios();
     currentX = 0;
@@ -129,6 +128,22 @@ function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
     renderer.shadowMapSoft = true;
+
+    addReference()
+    createCameras();
+
+    composer = new THREE.EffectComposer(renderer);
+    composer.setSize(window.innerWidth, window.innerHeight);
+
+    var renderPass = new THREE.RenderPass(scene, activeCamera);
+    composer.addPass(renderPass);
+
+    var copyPass = new THREE.ShaderPass( THREE.CopyShader );
+    copyPass.renderToScreen = true;
+    composer.addPass(copyPass);
+
+    //var shaderPass = new THREE.ShaderPass(THREE.SepiaShader);
+    //composer.addPass(shaderPass);
 
     document.body.appendChild(renderer.domElement);
 }
@@ -169,7 +184,14 @@ function animate() {
     }
 
     musicController.calculateVolume(controls.getObject().position.x, controls.getObject().position.y);
-    renderer.render(scene, activeCamera);
+    //renderer.render(scene, activeCamera);
+
+    
+    //NOTE: this goes in your render loop
+    
+
+    composer.render();
+    
 }
 
 
@@ -259,7 +281,7 @@ function createStages() {
  * Returns:
  * - Array containing the Camera objects.
  */
-function createCameras(stage){
+function createCameras(){
     cameras.push(createGodViewCamera());
     mcamera = createCharCamera();
     controls = new THREE.PointerLockControls( mcamera );
