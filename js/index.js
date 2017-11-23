@@ -11,7 +11,8 @@ var cube;
 
 // Variables for the scene.
 var cameras = [];
-var scene, camera, renderer, light;
+var scene, camera, renderer, light, composer;
+var focusShader, colorifyShader, dotScreenShader;
 var planeGround, skybox;
 var activeCamera;
 
@@ -100,9 +101,8 @@ $( document ).ready(function(){
     setSkybox("http://aleph.com.mx/squanch/skybox4/");
     
     let stages = createStages();
+    
     createRestRooms();
-    addReference()
-    createCameras(stages[0]);
     musicController = new MusicController(stages);
     musicController.createAudios();
     currentX = 0;
@@ -113,6 +113,7 @@ $( document ).ready(function(){
     addOnKeyLiftedListener();
     addCamaraSelectListener();
     addSkyboxSelectListener();
+    addShaderSelectListener();
     animate();
 })
 
@@ -131,7 +132,54 @@ function init() {
     renderer.shadowMap.enabled = true;
     renderer.shadowMapSoft = true;
 
+    addReference()
+    createCameras();
+
+    addComposer();
+
     document.body.appendChild(renderer.domElement);
+}
+
+function addComposer() {
+    composer = new THREE.EffectComposer(renderer);
+    composer.setSize(window.innerWidth, window.innerHeight);
+    addShadersToComposer();
+}
+
+function addShadersToComposer() {
+    var renderPass = new THREE.RenderPass(scene, activeCamera);
+    composer.addPass(renderPass);
+
+    focusShader = new THREE.ShaderPass(THREE.FocusShader);
+    focusShader.enabled = false;
+    composer.addPass(focusShader);
+
+    colorifyShader = new THREE.ShaderPass(THREE.ColorifyShader);
+    colorifyShader.enabled = false;
+    composer.addPass(colorifyShader);
+
+    dotScreenShader = new THREE.ShaderPass(THREE.DotScreenShader);
+    dotScreenShader.enabled = false;
+    composer.addPass(dotScreenShader);
+
+    var copyPass = new THREE.ShaderPass( THREE.CopyShader );
+    copyPass.renderToScreen = true;
+    composer.addPass(copyPass);
+}
+
+function enableShader(shader) {
+    for (var i = 1; i < composer.passes.length - 1; i++) {
+        if (composer.passes[i] == shader) {
+            if (composer.passes[i].enabled) {
+                composer.passes[i].enabled = false;
+            }
+            else {
+                composer.passes[i].enabled = true;
+            }
+        } else {
+            composer.passes[i].enabled = false;
+        }
+    }
 }
 
 function animate() {
@@ -170,7 +218,14 @@ function animate() {
     }
 
     musicController.calculateVolume(controls.getObject().position.x, controls.getObject().position.y);
-    renderer.render(scene, activeCamera);
+    //renderer.render(scene, activeCamera);
+
+    
+    //NOTE: this goes in your render loop
+    
+
+    composer.render();
+    
 }
 
 
@@ -306,7 +361,7 @@ function createRestRooms() {
  * Returns:
  * - Array containing the Camera objects.
  */
-function createCameras(stage){
+function createCameras(){
     cameras.push(createGodViewCamera());
     mcamera = createCharCamera();
     controls = new THREE.PointerLockControls( mcamera );
@@ -383,6 +438,7 @@ function addCamaraSelectListener() {
             console.log("Camera " + event.keyCode);
             console.log(event.keyCode - MIN_CAMERA);
             activeCamera = cameras[event.keyCode - MIN_CAMERA];
+            composer.passes[0] = new THREE.RenderPass(scene, activeCamera);
         }
     });
 }
@@ -393,7 +449,6 @@ function addCamaraSelectListener() {
 function addSkyboxSelectListener() {
     $(document).keydown(function(event){
         event.preventDefault();
-        console.log("Simon " + event.keyCode);
         if(event.keyCode == SKYBOX1_KEY_CODE){
             setSkybox("http://aleph.com.mx/squanch/skybox1/");
         }
@@ -402,6 +457,25 @@ function addSkyboxSelectListener() {
         }
         else if(event.keyCode == SKYBOX3_KEY_CODE){
             setSkybox("http://aleph.com.mx/squanch/skybox4/");
+        }
+    });
+}
+
+
+/**
+ * Add a listener for the keyboard to change current shader.
+ */
+function addShaderSelectListener() {
+    $(document).keydown(function(event){
+        event.preventDefault();
+        if(event.keyCode == SHADER1_KEY_CODE){
+            enableShader(focusShader);
+        }
+        else if(event.keyCode == SHADER2_KEY_CODE){
+            enableShader(colorifyShader);
+        }
+        else if(event.keyCode == SHADER3_KEY_CODE){
+            enableShader(dotScreenShader);
         }
     });
 }
