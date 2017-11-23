@@ -40,7 +40,7 @@ class Stage {
         this.maxAudioDistance = this.distanceFrom(0, 0);
         this.audioSource = audioSource;
         this.djSetMesh = this.createDJSet();
-        this.createStage();
+        this.createStageModel(coordsScales[1]);
         this.posterMesh = this.createArtistPoster(coordsScales[1], posterSource);
         console.log(this.posX + ", " + this.posY);
     }
@@ -74,7 +74,10 @@ class Stage {
         return djSetMesh;
     }
 
-    createStage() {
+    /**
+     * Creates the 3D model of stage
+     */
+    createStageModel(posScale) {
         var onProgress = function ( xhr ) {
             if ( xhr.lengthComputable ) {
                 var percentComplete = xhr.loaded / xhr.total * 100;
@@ -94,8 +97,8 @@ class Stage {
             objLoader.setMaterials( materials );
             objLoader.setPath( 'resources/' );
             objLoader.load( 'renderedStage.obj', function ( object ) {
-                object.rotation.x = Math.PI / 2;
-                object.rotation.y = Math.PI / 2;
+                object.rotateX(Math.PI / 2);
+                object.rotateY(posScale * Math.PI / 2);
                 object.position.x = stageMesh.position.x;
                 object.position.y = stageMesh.position.y;
                 object.position.z += depth;
