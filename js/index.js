@@ -12,6 +12,7 @@ var cube;
 // Variables for the scene.
 var cameras = [];
 var scene, camera, renderer, light, composer;
+var focusShader, colorifyShader;
 var planeGround, skybox;
 var activeCamera;
 
@@ -111,6 +112,7 @@ $( document ).ready(function(){
     addOnKeyLiftedListener();
     addCamaraSelectListener();
     addSkyboxSelectListener();
+    addShaderSelectListener();
     animate();
 })
 
@@ -132,105 +134,47 @@ function init() {
     addReference()
     createCameras();
 
+    addComposer();
+
+    document.body.appendChild(renderer.domElement);
+}
+
+function addComposer() {
     composer = new THREE.EffectComposer(renderer);
     composer.setSize(window.innerWidth, window.innerHeight);
+    addShadersToComposer();
+}
 
+function addShadersToComposer() {
     var renderPass = new THREE.RenderPass(scene, activeCamera);
     composer.addPass(renderPass);
 
-    THREE.FocusShader = {
-        
-            uniforms : {
-        
-                "tDiffuse":       { type: "t", value: null },
-                "screenWidth":    { type: "f", value: 1024 },
-                "screenHeight":   { type: "f", value: 1024 },
-                "sampleDistance": { type: "f", value: 0.94 },
-                "waveFactor":     { type: "f", value: 0.00125 }
-        
-            },
-        
-            vertexShader: [
-        
-                "varying vec2 vUv;",
-        
-                "void main() {",
-        
-                    "vUv = uv;",
-                    "gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
-        
-                "}"
-        
-            ].join("\n"),
-        
-            fragmentShader: [
-        
-                "uniform float screenWidth;",
-                "uniform float screenHeight;",
-                "uniform float sampleDistance;",
-                "uniform float waveFactor;",
-        
-                "uniform sampler2D tDiffuse;",
-        
-                "varying vec2 vUv;",
-        
-                "void main() {",
-        
-                    "vec4 color, org, tmp, add;",
-                    "float sample_dist, f;",
-                    "vec2 vin;",
-                    "vec2 uv = vUv;",
-        
-                    "add = color = org = texture2D( tDiffuse, uv );",
-        
-                    "vin = ( uv - vec2( 0.5 ) ) * vec2( 1.4 );",
-                    "sample_dist = dot( vin, vin ) * 2.0;",
-        
-                    "f = ( waveFactor * 100.0 + sample_dist ) * sampleDistance * 4.0;",
-        
-                    "vec2 sampleSize = vec2(  1.0 / screenWidth, 1.0 / screenHeight ) * vec2( f );",
-        
-                    "add += tmp = texture2D( tDiffuse, uv + vec2( 0.111964, 0.993712 ) * sampleSize );",
-                    "if( tmp.b < color.b ) color = tmp;",
-        
-                    "add += tmp = texture2D( tDiffuse, uv + vec2( 0.846724, 0.532032 ) * sampleSize );",
-                    "if( tmp.b < color.b ) color = tmp;",
-        
-                    "add += tmp = texture2D( tDiffuse, uv + vec2( 0.943883, -0.330279 ) * sampleSize );",
-                    "if( tmp.b < color.b ) color = tmp;",
-        
-                    "add += tmp = texture2D( tDiffuse, uv + vec2( 0.330279, -0.943883 ) * sampleSize );",
-                    "if( tmp.b < color.b ) color = tmp;",
-        
-                    "add += tmp = texture2D( tDiffuse, uv + vec2( -0.532032, -0.846724 ) * sampleSize );",
-                    "if( tmp.b < color.b ) color = tmp;",
-        
-                    "add += tmp = texture2D( tDiffuse, uv + vec2( -0.993712, -0.111964 ) * sampleSize );",
-                    "if( tmp.b < color.b ) color = tmp;",
-        
-                    "add += tmp = texture2D( tDiffuse, uv + vec2( -0.707107, 0.707107 ) * sampleSize );",
-                    "if( tmp.b < color.b ) color = tmp;",
-        
-                    "color = color * vec4( 2.0 ) - ( add / vec4( 8.0 ) );",
-                    "color = color + ( add / vec4( 8.0 ) - color ) * ( vec4( 1.0 ) - vec4( sample_dist * 0.5 ) );",
-        
-                    "gl_FragColor = vec4( color.rgb * color.rgb * vec3( 0.95 ) + color.rgb, 1.0 );",
-        
-                "}"
-        
-        
-            ].join("\n")
-        };
+    focusShader = new THREE.ShaderPass(THREE.FocusShader);
+    focusShader.enabled = false;
+    composer.addPass(focusShader);
 
-    var sepia = new THREE.ShaderPass(THREE.FocusShader);
-    sepia.enabled = true;
-    composer.addPass(sepia);
+    colorifyShader = new THREE.ShaderPass(THREE.ColorifyShader);
+    colorifyShader.enabled = false;
+    composer.addPass(colorifyShader);
 
     var copyPass = new THREE.ShaderPass( THREE.CopyShader );
     copyPass.renderToScreen = true;
     composer.addPass(copyPass);
+}
 
-    document.body.appendChild(renderer.domElement);
+function enableShader(shader) {
+    for (var i = 1; i < composer.passes.length - 1; i++) {
+        if (composer.passes[i] == shader) {
+            if (composer.passes[i].enabled) {
+                composer.passes[i].enabled = false;
+            }
+            else {
+                composer.passes[i].enabled = true;
+            }
+        } else {
+            composer.passes[i].enabled = false;
+        }
+    }
 }
 
 function animate() {
@@ -454,7 +398,6 @@ function addCamaraSelectListener() {
 function addSkyboxSelectListener() {
     $(document).keydown(function(event){
         event.preventDefault();
-        console.log("Simon " + event.keyCode);
         if(event.keyCode == SKYBOX1_KEY_CODE){
             setSkybox("http://aleph.com.mx/squanch/skybox1/");
         }
@@ -462,6 +405,25 @@ function addSkyboxSelectListener() {
             setSkybox("http://aleph.com.mx/squanch/skybox3/");
         }
         else if(event.keyCode == SKYBOX3_KEY_CODE){
+            setSkybox("http://aleph.com.mx/squanch/skybox4/");
+        }
+    });
+}
+
+
+/**
+ * Add a listener for the keyboard to change current shader.
+ */
+function addShaderSelectListener() {
+    $(document).keydown(function(event){
+        event.preventDefault();
+        if(event.keyCode == SHADER1_KEY_CODE){
+            enableShader(focusShader);
+        }
+        else if(event.keyCode == SHADER2_KEY_CODE){
+            enableShader(colorifyShader);
+        }
+        else if(event.keyCode == SHADER3_KEY_CODE){
             setSkybox("http://aleph.com.mx/squanch/skybox4/");
         }
     });
