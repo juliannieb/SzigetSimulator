@@ -443,6 +443,7 @@ function addCamaraSelectListener() {
             console.log("Camera " + event.keyCode);
             console.log(event.keyCode - MIN_CAMERA);
             activeCamera = cameras[event.keyCode - MIN_CAMERA];
+            composer.passes[0] = new THREE.RenderPass(scene, activeCamera);
         }
     });
 }
