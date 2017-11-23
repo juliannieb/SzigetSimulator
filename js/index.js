@@ -275,18 +275,29 @@ function createRestRooms() {
         var objLoader = new THREE.OBJLoader();
         objLoader.setMaterials( materials );
         objLoader.setPath( 'resources/' );
-        objLoader.load( 'bathroomRendered.obj', function ( object ) {
-            object.rotateX(Math.PI / 2);
-            //var planeHeight = planeGround.geometry.parameters.height;
-            //var planeWidth = planeGround.geometry.parameters.width;
-            //object.position.x = planeGround.position.x + planeWidth/2;
-            //object.position.y = planeGround.position.y + planeHeight/2;
-            object.scale.x = 1/12;
-            object.scale.y = 1/12;
-            object.scale.z = 1/12;
-            console.log("Bathroom loaded!");
-            scene.add(object);
-        }, onProgress, onError );
+        var planeHeight = planeGround.geometry.parameters.height;
+        var planeWidth = planeGround.geometry.parameters.width;
+        var widhTemp = 12;
+        var spaceBetween = 20;
+        var positionScales = [-7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7];
+        [1, -1].forEach(function(side) {
+            positionScales.forEach(function(i) {
+                objLoader.load( 'bathroomRendered.obj', function ( object ) {
+                    object.rotateX(Math.PI / 2);
+                    if (side == -1) {
+                        object.rotateY(Math.PI);
+                    }                    
+                    object.position.y = planeGround.position.y + side*planeHeight/2 - side*widhTemp;
+                    object.position.x += spaceBetween * i;
+                    object.scale.x = 1/12;
+                    object.scale.y = 1/12;
+                    object.scale.z = 1/12;
+                    console.log("Bathroom loaded!");
+                    console.log(object);
+                    scene.add(object);
+                }, onProgress, onError );
+            });
+        });                
     });
 }
 
