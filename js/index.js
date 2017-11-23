@@ -100,7 +100,7 @@ $( document ).ready(function(){
     setSkybox("http://aleph.com.mx/squanch/skybox4/");
     
     let stages = createStages();
-    //createRestRooms();
+    createRestRooms();
     addReference()
     createCameras(stages[0]);
     musicController = new MusicController(stages);
@@ -270,21 +270,20 @@ function createRestRooms() {
 
     var mtlLoader = new THREE.MTLLoader();
     mtlLoader.setPath( 'resources/' );
-    mtlLoader.load( 'bathroom.mtl', function( materials ) {
+    mtlLoader.load( 'bathroomRendered.mtl', function( materials ) {
         materials.preload();
         var objLoader = new THREE.OBJLoader();
         objLoader.setMaterials( materials );
         objLoader.setPath( 'resources/' );
-        objLoader.load( 'bathroom.obj', function ( object ) {
+        objLoader.load( 'bathroomRendered.obj', function ( object ) {
             object.rotateX(Math.PI / 2);
-            var planeHeight = planeGround.geometry.parameters.height;
-            var planeWidth = planeGround.geometry.parameters.width;
-            object.position.x = planeGround.position.x + planeWidth/2;
-            object.position.y = planeGround.position.y + planeHeight/2;
-            object.position.z = 100;
-            //object.scale.x = 15;
-            //object.scale.y = 15;
-            //object.scale.z = 15;
+            //var planeHeight = planeGround.geometry.parameters.height;
+            //var planeWidth = planeGround.geometry.parameters.width;
+            //object.position.x = planeGround.position.x + planeWidth/2;
+            //object.position.y = planeGround.position.y + planeHeight/2;
+            object.scale.x = 1/12;
+            object.scale.y = 1/12;
+            object.scale.z = 1/12;
             console.log("Bathroom loaded!");
             scene.add(object);
         }, onProgress, onError );

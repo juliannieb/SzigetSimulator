@@ -40,8 +40,7 @@ class Stage {
         this.maxAudioDistance = this.distanceFrom(0, 0);
         this.audioSource = audioSource;
         this.djSetMesh = this.createDJSet();
-        //this.createStageModel(coordsScales[1]);
-        this.createRestRooms();
+        this.createStageModel(coordsScales[1]); 
         this.posterMesh = this.createArtistPoster(coordsScales[1], posterSource);
         console.log(this.posX + ", " + this.posY);
     }
@@ -111,40 +110,7 @@ class Stage {
         });
     }
 
-    createRestRooms() {
-        var onProgress = function ( xhr ) {
-            if ( xhr.lengthComputable ) {
-                var percentComplete = xhr.loaded / xhr.total * 100;
-                console.log( Math.round(percentComplete, 2) + '% Bathroom downloaded' );
-            }
-        };
     
-        var onError = function ( xhr ) { 
-            console.log("Error on bathroom");
-        };
-        var stageMesh = this.stageMesh;
-        var depth = this.depth;
-        var mtlLoader = new THREE.MTLLoader();
-        mtlLoader.setPath( 'resources/' );
-        mtlLoader.load( 'bathroom.mtl', function( materials ) {
-            materials.preload();
-            var objLoader = new THREE.OBJLoader();
-            objLoader.setMaterials( materials );
-            objLoader.setPath( 'resources/' );
-            objLoader.load( 'bathroom.obj', function ( object ) {
-                object.rotateX(Math.PI / 2);
-                //object.position.x = stageMesh.position.x;
-                //object.position.y = stageMesh.position.y;
-                //object.position.z += depth;
-                //object.scale.x = 15;
-                //object.scale.y = 15;
-                //object.scale.z = 15;
-                console.log("Bathroom loaded!");
-                scene.add(object);
-            }, onProgress, onError );
-        });
-    }
-
     /**
      * Creates DJ's poster and position it behing the set
      * RETURNS:
