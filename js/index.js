@@ -12,7 +12,7 @@ var cube;
 // Variables for the scene.
 var cameras = [];
 var scene, camera, renderer, light, composer;
-var focusShader, colorifyShader;
+var focusShader, colorifyShader, dotScreenShader;
 var planeGround, skybox;
 var activeCamera;
 
@@ -156,6 +156,10 @@ function addShadersToComposer() {
     colorifyShader = new THREE.ShaderPass(THREE.ColorifyShader);
     colorifyShader.enabled = false;
     composer.addPass(colorifyShader);
+
+    dotScreenShader = new THREE.ShaderPass(THREE.DotScreenShader);
+    dotScreenShader.enabled = false;
+    composer.addPass(dotScreenShader);
 
     var copyPass = new THREE.ShaderPass( THREE.CopyShader );
     copyPass.renderToScreen = true;
@@ -424,7 +428,7 @@ function addShaderSelectListener() {
             enableShader(colorifyShader);
         }
         else if(event.keyCode == SHADER3_KEY_CODE){
-            setSkybox("http://aleph.com.mx/squanch/skybox4/");
+            enableShader(dotScreenShader);
         }
     });
 }
