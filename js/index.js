@@ -314,13 +314,6 @@ function createStages() {
         scene.add(stage.stageMesh);
         scene.add(stage.djSetMesh);
         scene.add(stage.posterMesh);
-
-        var light = new THREE.SpotLight( 0xff0000, 2);
-        light.position.set( stage.stageMesh.position.x, stage.stageMesh.position.y, stage.depth );
-        //light.position.set(0, 1, 0).normalize();
-        light.castShadow = true;
-        light.target = stage.posterMesh;
-        scene.add(light);
     });
 
     return stages;
