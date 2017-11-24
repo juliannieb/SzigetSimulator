@@ -31,6 +31,8 @@ var moveLeft = false;
 var moveRight = false;
 var canJump = false;
 
+var people = [];
+
 var prevTime = performance.now();
 var velocity = new THREE.Vector3();
 
@@ -102,6 +104,7 @@ $( document ).ready(function(){
     
     let stages = createStages();
     
+    addPeople(stages);
     createRestRooms();
     musicController = new MusicController(stages);
     musicController.createAudios();
@@ -462,6 +465,67 @@ function addSkyboxSelectListener() {
 }
 
 
+
+function addPeople(stages) {
+    var onProgress = function ( xhr ) {
+        if ( xhr.lengthComputable ) {
+            var percentComplete = xhr.loaded / xhr.total * 100;
+            console.log( Math.round(percentComplete, 2) + '% Stage downloaded' );
+        }
+    };
+
+    var onError = function ( xhr ) { };
+
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.setPath( 'resources/' );
+    mtlLoader.load( 'turned_lego.mtl', function( materials ) {
+        materials.preload();
+        var objLoader = new THREE.OBJLoader();
+        objLoader.setMaterials( materials );
+        objLoader.setPath( 'resources/' );
+        var planeHeight = planeGround.geometry.parameters.height;
+        var planeWidth = planeGround.geometry.parameters.width;
+        var widhTemp = 12;
+        var spaceBetween = 20;
+        var positionScales = [-7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7];
+
+        // What needs to be done
+        
+        
+        // animate their movement
+        
+        // render them with appropriate materials
+        
+        // Load the object
+        objLoader.load( 'turned_lego.obj', function ( object ) {
+            // Rotate it and put it to scale
+            object.rotateX(Math.PI / 2);
+            // object.rotateZ(Math.PI / 2);              
+            object.scale.x = 1/4;
+            object.scale.y = 1/4;
+            object.scale.z = 1/4;
+
+
+            stages.forEach(function(stage) { // For each stage
+
+                var minY = stage.stageMesh.position.y - ((stage.width / 2) - 70);
+                var maxY = stage.stageMesh.position.y + ((stage.width / 2) - 70);
+                for (var i = 0; i < 20; i++) { // Render 20 copies of the lego man
+                    new_instance = object.clone()
+                    new_instance.position.x = stage.stageMesh.position.x + ((i * stage.orientation) * spaceBetween) + (270 * stage.orientation);
+                    new_instance.position.y = Math.floor(Math.random() * (maxY - minY + 1)) + minY; // Random within the width of the stage
+                    new_instance.rotateY(stage.orientation * -1 * Math.PI / 2); // Make them look towards the stage
+                    scene.add(new_instance);
+                }
+            });
+
+            console.log("Bathroom loaded!");
+            console.log(object);
+            // scene.add(object);
+        }, onProgress, onError );
+            
+    });
+}
 /**
  * Add a listener for the keyboard to change current shader.
  */

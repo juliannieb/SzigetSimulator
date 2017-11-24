@@ -26,6 +26,7 @@ class Stage {
         this.height = planeHeight/2 - planeHeight/6;
         this.width = planeWidth/4;
         this.depth = 20;
+        this.orientation = coordsScales[1];
         // Define the mesh of the stage.
         var geometry = new THREE.BoxBufferGeometry( this.width, this.height, this.depth );
         this.stageMesh = new THREE.Mesh(geometry, boxMaterial);
