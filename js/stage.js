@@ -43,6 +43,7 @@ class Stage {
         this.djSetMesh = this.createDJSet();
         this.createStageModel(coordsScales[1]); 
         this.posterMesh = this.createArtistPoster(coordsScales[1], posterSource);
+        this.addPosterSpotlight();
         console.log(this.posX + ", " + this.posY);
     }
 
@@ -140,6 +141,33 @@ class Stage {
         posterMesh.material.side = THREE.DoubleSide;
         console.log(posterMesh);
         return posterMesh;
+    }
+
+    addPosterSpotlight() {
+        if (this.light != null) {
+            scene.remove(this.light);
+            this.light = null;
+        }
+        var ran = Math.floor((Math.random() * 4) + 1);
+        var color = 0xffffff;
+        if (ran == 1) {
+            color = 0xffffff;
+        }
+        else if (ran == 2) {
+            color = 0xff0000;
+        }
+        else if (ran == 3) {
+            color = 0x00ff00;
+        }
+        else if (ran == 4) {
+            color = 0x0000ff;
+        }
+        this.light = new THREE.SpotLight( color, 2);
+        this.light.position.set( this.stageMesh.position.x, this.stageMesh.position.y, this.depth );
+        //light.position.set(0, 1, 0).normalize();
+        this.light.castShadow = true;
+        this.light.target = this.posterMesh;
+        scene.add(this.light);
     }
 
     distanceFrom(x, y) {
