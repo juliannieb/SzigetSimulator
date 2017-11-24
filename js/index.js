@@ -15,6 +15,8 @@ var scene, camera, renderer, light, composer;
 var focusShader, colorifyShader, dotScreenShader;
 var planeGround, skybox;
 var activeCamera;
+var date;
+var stages;
 
 var musicController;
 
@@ -102,7 +104,7 @@ $( document ).ready(function(){
     addGround();
     setSkybox("http://aleph.com.mx/squanch/skybox4/");
     
-    let stages = createStages();
+    stages = createStages();
     
     addPeople(stages);
     createRestRooms();
@@ -117,6 +119,7 @@ $( document ).ready(function(){
     addCamaraSelectListener();
     addSkyboxSelectListener();
     addShaderSelectListener();
+    date = new Date();
     animate();
 })
 
@@ -224,6 +227,13 @@ function animate() {
 
         prevTime = time;
 
+        if (new Date() - date > 2000) {
+            stages.forEach(function(stage) {
+                addPosterSpotlight(stage);
+            });
+            date = new Date();
+        }
+
     }
 
     musicController.calculateVolume(controls.getObject().position.x, controls.getObject().position.y);
@@ -314,9 +324,37 @@ function createStages() {
         scene.add(stage.stageMesh);
         scene.add(stage.djSetMesh);
         scene.add(stage.posterMesh);
+        addPosterSpotlight(stage);
     });
 
     return stages;
+}
+
+function addPosterSpotlight(stage) {
+    if (stage.light != undefined) {
+        scene.remove(stage.light);
+        stage.light = null;
+    }
+    var ran = Math.floor((Math.random() * 4) + 1);
+    var color = 0xffffff;
+    if (ran == 1) {
+        color = 0xffffff;
+    }
+    else if (ran == 2) {
+        color = 0xff0000;
+    }
+    else if (ran == 3) {
+        color = 0x00ff00;
+    }
+    else if (ran == 4) {
+        color = 0x0000ff;
+    }
+    stage.light = new THREE.SpotLight( color, 2);
+    stage.light.position.set( stage.stageMesh.position.x, stage.stageMesh.position.y, stage.depth );
+    //light.position.set(0, 1, 0).normalize();
+    stage.light.castShadow = true;
+    stage.light.target = stage.posterMesh;
+    scene.add(stage.light);
 }
 
 /**
