@@ -218,6 +218,10 @@ function animate() {
 
         }
 
+        people.forEach(function(person) {
+            person.position.z = 0 + Math.abs((Math.sin(time / 250) * 10));
+        });
+
         prevTime = time;
 
     }
@@ -498,14 +502,11 @@ function addPeople(stages) {
         var planeWidth = planeGround.geometry.parameters.width;
         var widhTemp = 12;
         var spaceBetween = 20;
-        var positionScales = [-7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7];
 
         // What needs to be done
         
         
         // animate their movement
-        
-        // render them with appropriate materials
         
         // Load the object
         objLoader.load( 'turned_lego.obj', function ( object ) {
@@ -526,6 +527,7 @@ function addPeople(stages) {
                     new_instance.position.x = stage.stageMesh.position.x + ((i * stage.orientation) * spaceBetween) + (270 * stage.orientation);
                     new_instance.position.y = Math.floor(Math.random() * (maxY - minY + 1)) + minY; // Random within the width of the stage
                     new_instance.rotateY(stage.orientation * -1 * Math.PI / 2); // Make them look towards the stage
+                    people.push(new_instance);
                     scene.add(new_instance);
                 }
             });
