@@ -127,8 +127,10 @@ function init() {
     
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf0f0f0);
-    light = new THREE.AmbientLight(0xffffff, 2);
-    light.position.set(0, 1, 0).normalize();
+    light = new THREE.SpotLight( 0xffffff, 1.5 );
+    light.position.set( 0, 0, 3000 );
+    //light.position.set(0, 1, 0).normalize();
+    light.castShadow = true;
     scene.add(light);
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -308,6 +310,13 @@ function createStages() {
         scene.add(stage.stageMesh);
         scene.add(stage.djSetMesh);
         scene.add(stage.posterMesh);
+
+        var light = new THREE.SpotLight( 0xffffff, 2);
+        light.position.set( stage.stageMesh.position.x, stage.stageMesh.position.y, stage.depth );
+        //light.position.set(0, 1, 0).normalize();
+        light.castShadow = true;
+        light.target = stage.posterMesh;
+        scene.add(light);
     });
 
     return stages;
@@ -352,6 +361,8 @@ function createRestRooms() {
                     object.scale.z = 1/12;
                     console.log("Bathroom loaded!");
                     console.log(object);
+                    object.castShadow = true;
+                    object.receiveShadow = true;
                     scene.add(object);
                 }, onProgress, onError );
             });
